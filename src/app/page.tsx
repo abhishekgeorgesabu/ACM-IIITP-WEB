@@ -3,7 +3,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRive } from '@rive-app/react-canvas';
+import { useRive } from '@rive-app/react-webgl2';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { ContactForm } from '@/components/contact-form';
@@ -92,11 +92,13 @@ const TeamCategory = ({ title, members }: { title: string, members: TeamMember[]
 export default function Home() {
   const teamCategories = ['Faculty Advisor', 'Office Bearer', 'Vertical Head', 'Member'];
   
-  const { RiveComponent } = useRive({
+  const { rive, RiveComponent } = useRive({
     // You can find a public Rive file URL in the Rive Community Showcase
     // or use your own. You'll need to replace this.
-    src: 'https://cdn.rive.app/animations/vehicles.riv',
+    src: 'acm.riv',
+    stateMachines: "State Machine 1",
     autoplay: true,
+    
   });
 
 
@@ -124,9 +126,7 @@ export default function Home() {
                 </Button>
               </div>
             </div>
-             <div className="mx-auto aspect-video overflow-hidden rounded-xl animate-fade-in-up">
-              {RiveComponent && <RiveComponent className="w-full h-full" />}
-            </div>
+            <RiveComponent />
            
           </div>
         </Section>
