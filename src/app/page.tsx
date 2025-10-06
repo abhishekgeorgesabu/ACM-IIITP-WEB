@@ -3,7 +3,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import useRive from 'rive-react';
+import { useRive } from '@rive-app/react-canvas';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { ContactForm } from '@/components/contact-form';
@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ArrowRight, Calendar, Users, Award, Briefcase, Lightbulb, Bot, User } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 type TeamMember = {
   id: string;
@@ -22,10 +23,10 @@ type TeamMember = {
 };
 
 const team: TeamMember[] = [
-  { id: '1', name: 'Dr. Anirban Das', role: 'Faculty Advisor', category: 'Faculty Advisor', bio: 'Guiding the chapter with years of experience in academia and research.', imageId: 'team-advisor' },
-  { id: '2', name: 'Aisha Khan', role: 'Chairperson', category: 'Office Bearer', bio: 'Leading the team towards new heights and fostering a culture of innovation.', imageId: 'team-chair' },
-  { id: '3', name: 'Ben Carter', role: 'Vice Chairperson', category: 'Office Bearer', bio: 'Supporting the chapter\'s vision and managing internal affairs.', imageId: 'team-vice-chair' },
-  { id: '4', name: 'Carlos Diaz', role: 'Secretary', category: 'Office Bearer', bio: 'Organizing, documenting, and ensuring smooth communication.', imageId: 'team-secretary' },
+  { id: '1', name: 'Dr. Shrikant Salave', role: 'Faculty Advisor', category: 'Faculty Advisor', bio: 'Guiding the chapter with years of experience in academia and research.', imageId: 'team-advisor' },
+  { id: '2', name: 'Saurav Dhabade', role: 'Chair', category: 'Office Bearer', bio: 'Leading the team towards new heights and fostering a culture of innovation.', imageId: 'team-chair' },
+  { id: '3', name: 'Roshni Sahoo', role: 'Vice Chair', category: 'Office Bearer', bio: 'Supporting the chapter\'s vision and managing internal affairs.', imageId: 'team-vice-chair' },
+  { id: '4', name: 'Gargi Avadhani', role: 'Treasurer', category: 'Office Bearer', bio: 'Organizing, documenting, and ensuring smooth communication.', imageId: 'team-secretary' },
   { id: '5', name: 'Diana Evans', role: 'Competitive Programming Head', category: 'Vertical Head', bio: 'Leading the charge in algorithmic challenges and contests.', imageId: 'team-head-cp' },
   { id: '6', name: 'Frank Green', role: 'Development Head', category: 'Vertical Head', bio: 'Building cool projects and exploring new technologies.', imageId: 'team-head-dev' },
   { id: '7', name: 'Grace Hall', role: 'Machine Learning Head', category: 'Vertical Head', bio: 'Diving deep into data, models, and artificial intelligence.', imageId: 'team-head-ml' },
@@ -56,8 +57,8 @@ const Section = ({ id, className, children }: { id?: string, className?: string,
   </section>
 );
 
-const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12">
+const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+  <h2 className={cn("text-3xl font-headline font-bold tracking-tighter sm:text-4xl md:text-5xl text-center", className)}>
     {children}
   </h2>
 );
@@ -123,15 +124,16 @@ export default function Home() {
                 </Button>
               </div>
             </div>
-            <div className="mx-auto aspect-video overflow-hidden rounded-xl animate-fade-in-up">
+             <div className="mx-auto aspect-video overflow-hidden rounded-xl animate-fade-in-up">
               {RiveComponent && <RiveComponent className="w-full h-full" />}
             </div>
+           
           </div>
         </Section>
 
         {/* About Section */}
         <Section id="about" className="bg-card">
-          <SectionTitle>About Us</SectionTitle>
+          <SectionTitle className="mb-12">About Us</SectionTitle>
           <p className="max-w-3xl mx-auto text-center text-muted-foreground md:text-lg">
             ACM, the world's largest educational and scientific computing society, delivers resources that advance computing as a science and a profession. The IIIT Pune ACM Student Chapter is a hub for students passionate about computer science. We organize a variety of events, including coding competitions, workshops, and tech talks, to foster a vibrant tech culture on campus and provide a platform for students to learn, innovate, and network.
           </p>
@@ -139,9 +141,9 @@ export default function Home() {
 
         {/* Events Section */}
         <Section id="events">
-          <div className="flex justify-center items-center mb-12 relative">
-            <SectionTitle>Upcoming Events</SectionTitle>
-            <Button asChild variant="outline" className="absolute right-0 top-1/2 -translate-y-1/2">
+           <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
+            <SectionTitle className="mb-0 text-center md:text-left">Upcoming Events</SectionTitle>
+            <Button asChild variant="outline" className="w-full md:w-auto">
                 <Link href="/events">Show All <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
           </div>
@@ -170,7 +172,7 @@ export default function Home() {
 
         {/* Membership Section */}
         <Section id="membership" className="bg-card">
-          <SectionTitle>Become a Member</SectionTitle>
+          <SectionTitle className="mb-12">Become a Member</SectionTitle>
           <div className="max-w-4xl mx-auto">
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1">
@@ -202,7 +204,7 @@ export default function Home() {
 
         {/* Team Section */}
         <Section id="team">
-          <SectionTitle>Our Team</SectionTitle>
+          <SectionTitle className="mb-12">Our Team</SectionTitle>
           {teamCategories.map(category => (
             <TeamCategory
               key={category}
@@ -214,7 +216,7 @@ export default function Home() {
 
         {/* Contact Section */}
         <Section id="contact" className="bg-card">
-          <SectionTitle>Get In Touch</SectionTitle>
+          <SectionTitle className="mb-12">Get In Touch</SectionTitle>
           <div className="max-w-2xl mx-auto">
             <p className="text-center text-muted-foreground mb-8">
               Have a question or a proposal? We'd love to hear from you.
@@ -228,3 +230,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
