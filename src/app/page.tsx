@@ -124,7 +124,7 @@ export default function Home() {
               </div>
             </div>
             <div className="mx-auto aspect-video overflow-hidden rounded-xl animate-fade-in-up">
-              <RiveComponent className="w-full h-full" />
+              {RiveComponent && <RiveComponent className="w-full h-full" />}
             </div>
           </div>
         </Section>
