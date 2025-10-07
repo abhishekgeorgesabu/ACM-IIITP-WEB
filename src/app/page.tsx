@@ -109,7 +109,7 @@ export default function Home() {
           <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 xl:gap-16 items-center">
             <div className="flex flex-col justify-center space-y-4 text-center lg:text-left animate-fade-in-down">
               <h1 className="text-4xl font-headline font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-                Welcome to <span className="text-primary">ACM IIIT Pune</span>
+                Welcome to <span className="text-primary animate-glow-blue">ACM IIIT Pune</span>
               </h1>
               <p className="max-w-[600px] text-muted-foreground md:text-xl mx-auto lg:mx-0">
                 The official student chapter of the Association for Computing Machinery at IIIT Pune. We are a community of thinkers, creators, and innovators.
@@ -123,8 +123,8 @@ export default function Home() {
                 </Button>
               </div>
             </div>
-            <div className="mx-auto aspect-video overflow-hidden rounded-xl animate-fade-in-up">
-              {RiveComponent && <RiveComponent className="w-full h-full" />}
+            <div className="w-full h-[100px] md:h-[200px] lg:h-[400px]">
+              <RiveComponent className="w-full h-full"/>
             </div>
           </div>
         </Section>

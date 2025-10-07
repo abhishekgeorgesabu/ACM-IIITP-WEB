@@ -78,3 +78,20 @@ html {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  @keyframes glow-blue {
+    0%, 100% {
+      text-shadow: 0 0 5px #1a333de5, 0 0 10px #1a333de5, 0 0 15px #1a333de5, 0 0 20px #1a333de5;
+      opacity: 1;
+    }
+    50% {
+      text-shadow: 0 0 2px #1a333de5, 0 0 5px #1a333de5, 0 0 8px #1a333de5, 0 0 12px #1a333de5;
+      opacity: 0.8;
+    }
+  }
+  
+  .animate-glow-blue {
+    animation: glow-blue 2s ease-in-out infinite;
+  }
+}
