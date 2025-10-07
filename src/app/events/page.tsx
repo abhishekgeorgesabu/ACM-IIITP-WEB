@@ -5,15 +5,15 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Calendar, Mic, Award, Code } from 'lucide-react';
 
 const pastEvents = [
-  { title: 'CodeClash 2023', date: 'October 15, 2023', description: 'A fierce coding competition with over 200 participants.', icon: Award },
-  { title: 'Workshop: Intro to Git & GitHub', date: 'September 5, 2023', description: 'Hands-on session for version control basics.', icon: Code },
-  { title: 'Guest Lecture: The Future of AI', date: 'August 20, 2023', description: 'An insightful talk by a leading AI researcher.', icon: Mic },
+  { title: '--- ', date: '-----, 2025', description: '', icon: Award },
+  { title: '', date: '----- 2025', description: '', icon: Code },
+  { title: '', date: '----- 2025', description: '', icon: Mic },
 ];
 
 const futureEvents = [
-  { title: 'CodeSprint 5.0', date: 'October 26, 2024', description: 'Our flagship annual coding competition with exciting prizes and challenging problems.', icon: Award },
-  { title: 'Intro to Web Dev Workshop', date: 'November 12, 2024', description: 'A beginner-friendly workshop covering the basics of HTML, CSS, and JavaScript.', icon: Code },
-  { title: 'Alumni Tech Talk: AI in Fintech', date: 'November 28, 2024', description: 'An insightful session with an industry expert from our alumni network.', icon: Mic },
+  { title: 'ABC 1.0', date: 'October 26, 2025', description: 'Our flagship annual coding competition with exciting prizes and challenging problems.', icon: Award },
+  { title: 'Intro to Web Dev Workshop', date: 'November 12, 2025', description: 'A beginner-friendly workshop covering the basics of HTML, CSS, and JavaScript.', icon: Code },
+  { title: 'Alumni Tech Talk: AI in Fintech', date: 'November 28, 2025', description: 'An insightful session with an industry expert from our alumni network.', icon: Mic },
 ];
 
 const EventCard = ({ event }: { event: { title: string, date: string, description: string, icon: React.ElementType } }) => (
