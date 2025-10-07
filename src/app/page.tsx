@@ -93,12 +93,9 @@ export default function Home() {
   const teamCategories = ['Faculty Advisor', 'Office Bearer', 'Vertical Head', 'Member'];
   
   const { rive, RiveComponent } = useRive({
-    // You can find a public Rive file URL in the Rive Community Showcase
-    // or use your own. You'll need to replace this.
     src: 'acm.riv',
     stateMachines: "State Machine 1",
     autoplay: true,
-    
   });
 
 
@@ -118,7 +115,7 @@ export default function Home() {
                 The official student chapter of the Association for Computing Machinery at IIIT Pune. We are a community of thinkers, creators, and innovators.
               </p>
               <div className="flex flex-col sm:flex-row gap-2 justify-center lg:justify-start">
-                <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                <Button asChild size="lg">
                   <Link href="#events">Explore Events</Link>
                 </Button>
                 <Button asChild size="lg" variant="outline">
@@ -126,8 +123,9 @@ export default function Home() {
                 </Button>
               </div>
             </div>
-            <RiveComponent />
-           
+            <div className="mx-auto aspect-video overflow-hidden rounded-xl animate-fade-in-up">
+              {RiveComponent && <RiveComponent className="w-full h-full" />}
+            </div>
           </div>
         </Section>
 
@@ -161,7 +159,7 @@ export default function Home() {
                   <p className="text-muted-foreground">{event.description}</p>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                  <Button className="w-full">
                     Register Now <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </CardFooter>
@@ -230,5 +228,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
