@@ -23,7 +23,7 @@ type TeamMember = {
 };
 
 const team: TeamMember[] = [
-  { id: '1', name: 'Dr. Shrikant Salave', role: 'Faculty Advisor', category: 'Faculty Advisor', bio: 'Guiding the chapter with years of experience in academia and research.', imageId: 'team-advisor' },
+  { id: '1', name: 'Dr. Shrikant Salve', role: 'Faculty Advisor', category: 'Faculty Advisor', bio: 'Guiding the chapter with years of experience in academia and research.', imageId: 'team-advisor' },
   { id: '2', name: 'Saurav Dhabade', role: 'Chair', category: 'Office Bearer', bio: 'Leading the team towards new heights and fostering a culture of innovation.', imageId: 'team-chair' },
   { id: '3', name: 'Roshni Sahoo', role: 'Vice Chair', category: 'Office Bearer', bio: 'Supporting the chapter\'s vision and managing internal affairs.', imageId: 'team-vice-chair' },
   { id: '4', name: 'Gargi Avadhani', role: 'Treasurer', category: 'Office Bearer', bio: 'Organizing, documenting, and ensuring smooth communication.', imageId: 'team-secretary' },
