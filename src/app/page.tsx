@@ -3,6 +3,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import { useRive } from '@rive-app/react-webgl2';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
@@ -12,6 +13,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ArrowRight, Calendar, Users, Award, Briefcase, Lightbulb, Bot, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { eventsData } from '@/data/events';
+import { EventCard } from '@/components/event-card';
 
 type TeamMember = {
   id: string;
@@ -23,31 +26,36 @@ type TeamMember = {
 };
 
 const team: TeamMember[] = [
-  { id: '1', name: 'Dr. Shrikant Salve', role: 'Faculty Advisor', category: 'Faculty Advisor', bio: 'Guiding the chapter with years of experience in academia and research.', imageId: 'team-advisor' },
-  { id: '2', name: 'Saurav Dhabade', role: 'Chair', category: 'Office Bearer', bio: 'Leading the team towards new heights and fostering a culture of innovation.', imageId: 'team-chair' },
-  { id: '3', name: 'Roshni Sahoo', role: 'Vice Chair', category: 'Office Bearer', bio: 'Supporting the chapter\'s vision and managing internal affairs.', imageId: 'team-vice-chair' },
-  { id: '4', name: 'Gargi Avadhani', role: 'Treasurer', category: 'Office Bearer', bio: 'Organizing, documenting, and ensuring smooth communication.', imageId: 'team-secretary' },
-  { id: '5', name: 'ABC', role: 'Competitive Programming Head', category: 'Vertical Head', bio: 'Leading the charge in algorithmic challenges and contests.', imageId: 'team-head-cp' },
-  { id: '6', name: 'ABC ', role: 'Development Head', category: 'Vertical Head', bio: 'Building cool projects and exploring new technologies.', imageId: 'team-head-dev' },
-  { id: '7', name: 'ABC ', role: 'Machine Learning Head', category: 'Vertical Head', bio: 'Diving deep into data, models, and artificial intelligence.', imageId: 'team-head-ml' },
-  { id: '8', name: 'ABC ', role: 'Design Head', category: 'Vertical Head', bio: 'Crafting beautiful and intuitive user experiences.', imageId: 'team-head-design' },
-  { id: '9', name: 'ABC ', role: 'Corporate Head', category: 'Vertical Head', bio: 'Bridging the gap between students and the tech industry.', imageId: 'team-head-corp' },
-  { id: '10', name: 'ABC ', role: 'Public Relations Head', category: 'Vertical Head', bio: 'Managing the chapter\'s public image and outreach.', imageId: 'team-head-pr' },
-  { id: '11', name: 'ABC ', role: 'Member', category: 'Member', bio: 'Passionate about learning and contributing to the tech community.', imageId: 'team-member-1' },
-  { id: '12', name: 'ABC ', role: 'Member', category: 'Member', bio: 'A budding developer with a keen interest in open source.', imageId: 'team-member-2' },
-  { id: '13', name: 'ABC ', role: 'Member', category: 'Member', bio: 'Exploring the fascinating world of cybersecurity.', imageId: 'team-member-3' },
-  { id: '14', name: 'ABC ', role: 'Member', category: 'Member', bio: 'A competitive programmer honing his problem-solving skills.', imageId: 'team-member-4' },
-  { id: '15', name: 'ABC ', role: 'Member', category: 'Member', bio: 'Passionate about UI/UX and creating delightful interfaces.', imageId: 'team-member-5' },
-  { id: '16', name: 'ABC ', role: 'Member', category: 'Member', bio: 'Venturing into machine learning and its applications.', imageId: 'team-member-6' },
-  { id: '17', name: 'ABC ', role: 'Member', category: 'Member', bio: 'Loves to build web applications and learn new frameworks.', imageId: 'team-member-7' },
-  { id: '18', name: 'ABC ', role: 'Member', category: 'Member', bio: 'Interested in tech ethics and social impact.', imageId: 'team-member-8' },
+  { id: '1', name: 'Dr. Shrikant Salve', role: 'Faculty Advisor', category: 'Faculty Advisor', bio: 'Guiding the chapter with years of experience in academia and research.', imageId: '1' },
+  { id: '2', name: 'Saurav Dhabade', role: 'Chair', category: 'Office Bearer', bio: 'Leading the team towards new heights and fostering a culture of innovation.', imageId: '2' },
+  { id: '3', name: 'Roshni Sahoo', role: 'Vice Chair', category: 'Office Bearer', bio: 'Supporting the chapter\'s vision and managing internal affairs.', imageId: '3' },
+  { id: '4', name: 'Gargi Avadhani', role: 'Treasurer', category: 'Office Bearer', bio: 'Organizing, documenting, and ensuring smooth communication.', imageId: '4' },
+  { id: '5', name: 'Piyush Kulkarni', role: 'Membership Chair', category: 'Office Bearer', bio: 'Fostering community growth and ensuring a welcoming environment for all members.', imageId: '5' },
+  { id: '6', name: 'Ayushman Ghosh', role: 'Management Head', category: 'Vertical Head', bio: 'Ensuring smooth operations and effective management of chapter activities.', imageId: '6' },
+  { id: '7', name: 'Sarthak Gaikwad', role: 'AI/ML Head', category: 'Vertical Head', bio: 'Diving deep into data, models, and artificial intelligence.', imageId: '7' },
+  { id: '8', name: 'Harshit Nashine', role: 'AR/VR Head', category: 'Vertical Head', bio: 'Exploring immersive technologies and building virtual experiences.', imageId: '8' },
+  { id: '9', name: 'YUVRAJ JARWAL', role: 'Social Media Head', category: 'Vertical Head', bio: 'Managing the chapter\'s digital presence and engaging with the community.', imageId: '9' },
+  { id: '10', name: 'ABC', role: 'Competitive Programming Head', category: 'Vertical Head', bio: 'Leading the charge in algorithmic challenges and contests.', imageId: 'team-head-cp' },
+  { id: '11', name: 'ABC ', role: 'Development Head', category: 'Vertical Head', bio: 'Building cool projects and exploring new technologies.', imageId: 'team-head-dev' },
+  { id: '12', name: 'Dr. Shrikant Salve', role: 'Member', category: 'Member', bio: 'Guiding the chapter with years of experience in academia and research.', imageId: '12' },
+  { id: '13', name: 'Saurav Dhabade', role: 'Member', category: 'Member', bio: 'Leading the team towards new heights and fostering a culture of innovation.', imageId: '13' },
+  { id: '14', name: 'Roshni Sahoo', role: 'Member', category: 'Member', bio: 'Supporting the chapter\'s vision and managing internal affairs.', imageId: '14' },
+  { id: '15', name: 'Gargi Avadhani', role: 'Member', category: 'Member', bio: 'Organizing, documenting, and ensuring smooth communication.', imageId: '15' },
+  { id: '16', name: 'Piyush Kulkarni', role: 'Member', category: 'Member', bio: 'Fostering community growth and ensuring a welcoming environment for all members.', imageId: '16' },
+  { id: '17', name: 'Pravin Dhanrao', role: 'Member', category: 'Member', bio: 'Building cool projects and exploring new technologies.', imageId: '17' },
+  { id: '18', name: 'Akshita Gupta', role: 'Member', category: 'Member', bio: 'Diving deep into data, models, and artificial intelligence.', imageId: '18' },
+  { id: '19', name: 'Rajeshwari Harsh', role: 'Member', category: 'Member', bio: 'Crafting beautiful and intuitive user experiences.', imageId: '19' },
+  { id: '20', name: 'Kirtiraj Jadeja', role: 'Member', category: 'Member', bio: 'Bridging the gap between students and the tech industry.', imageId: '20' },
+  { id: '21', name: 'Priya Jadhav', role: 'Member', category: 'Member', bio: 'Managing the chapter\'s public image and outreach.', imageId: '21' },
+  { id: '22', name: 'Mahesh Lonare', role: 'Member', category: 'Member', bio: 'Passionate about learning and contributing to the tech community.', imageId: '22' },
+  { id: '23', name: 'Jyoti Manoorkar', role: 'Member', category: 'Member', bio: 'A budding developer with a keen interest in open source.', imageId: '23' },
+  { id: '24', name: 'Jayata Roy', role: 'Member', category: 'Member', bio: 'Exploring the fascinating world of cybersecurity.', imageId: '24' },
+  { id: '25', name: 'Santosh Shelke', role: 'Member', category: 'Member', bio: 'A competitive programmer honing his problem-solving skills.', imageId: '25' },
+  { id: '26', name: 'Swapnil Shinde', role: 'Member', category: 'Member', bio: 'Passionate about UI/UX and creating delightful interfaces.', imageId: '26' },
+  { id: '27', name: 'Faraj Tamboli', role: 'Member', category: 'Member', bio: 'Venturing into machine learning and its applications.', imageId: '27' },
 ];
 
-const events = [
-  { title: 'ABC 1.0', date: 'October 26, 2025', description: 'Our flagship annual coding competition with exciting prizes and challenging problems.', icon: Briefcase },
-  { title: 'Intro to Web Dev Workshop', date: 'November 12, 2025', description: 'A beginner-friendly workshop covering the basics of HTML, CSS, and JavaScript.', icon: Lightbulb },
-  { title: 'Alumni Tech Talk: AI in Fintech', date: 'November 28, 2025', description: 'An insightful session with an industry expert from our alumni network.', icon: Bot },
-];
+
 
 const Section = ({ id, className, children }: { id?: string, className?: string, children: React.ReactNode }) => (
   <section id={id} className={`py-12 md:py-20 lg:py-24 ${className}`}>
@@ -56,6 +64,25 @@ const Section = ({ id, className, children }: { id?: string, className?: string,
     </div>
   </section>
 );
+
+const TeamMemberImage = ({ id, name }: { id: string, name: string }) => {
+  const [src, setSrc] = useState(`/team/${id}.png`);
+
+  return (
+    <div className="w-full h-full aspect-square bg-white relative">
+      <Image
+        src={src}
+        alt={name}
+        fill
+        className="object-cover transition-transform duration-300 group-hover:scale-105"
+        onError={() => {
+          if (src.endsWith('.png')) setSrc(`/team/${id}.jpg`);
+          else if (src.endsWith('.jpg')) setSrc(`/team/${id}.JPG`);
+        }}
+      />
+    </div>
+  );
+};
 
 const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
   <h2 className={cn("text-3xl font-headline font-bold tracking-tighter sm:text-4xl md:text-5xl text-center", className)}>
@@ -69,20 +96,18 @@ const TeamCategory = ({ title, members }: { title: string, members: TeamMember[]
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 justify-center">
       {members.map((member) => (
         <div key={member.id} className="group relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-2 flex flex-col items-center justify-center">
-          <div className="w-full h-full aspect-square bg-card flex items-center justify-center">
-            <User className="w-24 h-24 text-muted-foreground" />
-          </div>
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-t from-black/80 to-transparent p-4 text-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            <div className="absolute bottom-4 left-4 right-4">
-               <h3 className="font-headline text-xl font-bold text-white">{member.name}</h3>
-               <p className="text-sm text-primary">{member.role}</p>
-               <p className="mt-2 text-xs text-white/80">{member.bio}</p>
+          <TeamMemberImage id={member.imageId} name={member.name} />
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 p-4 text-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div className="translate-y-4 transition-transform duration-300 group-hover:translate-y-0">
+              <h3 className="font-headline text-xl font-bold text-white">{member.name}</h3>
+              <p className="text-sm text-primary mb-2">{member.role}</p>
+              <p className="text-xs text-white/80 line-clamp-4">{member.bio}</p>
             </div>
           </div>
-           <div className="absolute inset-0 flex flex-col items-center justify-end bg-gradient-to-t from-black/80 to-transparent p-4 text-center transition-opacity duration-300 group-hover:opacity-0">
-              <h3 className="font-headline text-lg font-bold text-white">{member.name}</h3>
-              <p className="text-sm text-primary">{member.role}</p>
-           </div>
+          <div className="absolute inset-0 flex flex-col items-center justify-end bg-gradient-to-t from-black/80 to-transparent p-4 text-center transition-opacity duration-300 group-hover:opacity-0">
+            <h3 className="font-headline text-lg font-bold text-white">{member.name}</h3>
+            <p className="text-sm text-primary">{member.role}</p>
+          </div>
         </div>
       ))}
     </div>
@@ -91,12 +116,17 @@ const TeamCategory = ({ title, members }: { title: string, members: TeamMember[]
 
 export default function Home() {
   const teamCategories = ['Faculty Advisor', 'Office Bearer', 'Vertical Head', 'Member'];
-  
+
   const { rive, RiveComponent } = useRive({
     src: 'acm.riv',
     stateMachines: "State Machine 1",
     autoplay: true,
   });
+
+  // Sort events by date descending and take top 3
+  const recentEvents = [...eventsData].sort((a, b) => {
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  }).slice(0, 3);
 
 
   return (
@@ -124,7 +154,7 @@ export default function Home() {
               </div>
             </div>
             <div className="w-full h-[100px] md:h-[200px] lg:h-[400px]">
-              <RiveComponent className="w-full h-full"/>
+              <RiveComponent className="w-full h-full" />
             </div>
           </div>
         </Section>
@@ -137,33 +167,20 @@ export default function Home() {
           </p>
         </Section>
 
+
+
+
         {/* Events Section */}
         <Section id="events">
-           <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
             <SectionTitle className="mb-0 text-center md:text-left">Upcoming Events</SectionTitle>
             <Button asChild variant="outline" className="w-full md:w-auto">
-                <Link href="/events">Show All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              <Link href="/events">Show All <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
           </div>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {events.map((event, index) => (
-              <Card key={index} className="flex flex-col">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 font-headline">
-                    <event.icon className="h-6 w-6 text-primary" />
-                    {event.title}
-                  </CardTitle>
-                  <CardDescription><Calendar className="inline-block h-4 w-4 mr-1" />{event.date}</CardDescription>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <p className="text-muted-foreground">{event.description}</p>
-                </CardContent>
-                <CardFooter>
-                  <Button className="w-full">
-                    Register Now <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </CardFooter>
-              </Card>
+            {recentEvents.map((event) => (
+              <EventCard key={event.id} event={event} />
             ))}
           </div>
         </Section>

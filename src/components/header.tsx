@@ -8,11 +8,11 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/s
 import { Menu, Code } from 'lucide-react';
 
 const navLinks = [
-  { href: '#about', label: 'About' },
-  { href: '#events', label: 'Events' },
-  { href: '#membership', label: 'Membership' },
-  { href: '#team', label: 'Team' },
-  { href: '#contact', label: 'Contact' },
+  { href: '/#about', label: 'About' },
+  { href: '/events', label: 'Events' },
+  { href: '/#membership', label: 'Membership' },
+  { href: '/#team', label: 'Team' },
+  { href: '/#contact', label: 'Contact' },
 ];
 
 export function Header() {
@@ -60,11 +60,11 @@ export function Header() {
                 </Link>
                 <nav className="flex flex-col gap-4 mt-4">
                   {navLinks.map((link) => (
-                     <SheetClose asChild key={link.href}>
-                        <Link href={link.href} className="text-base font-medium text-foreground/80 hover:text-primary transition-colors py-2">
+                    <SheetClose asChild key={link.href}>
+                      <Link href={link.href} className="text-base font-medium text-foreground/80 hover:text-primary transition-colors py-2">
                         {link.label}
-                        </Link>
-                     </SheetClose>
+                      </Link>
+                    </SheetClose>
                   ))}
                 </nav>
               </div>
