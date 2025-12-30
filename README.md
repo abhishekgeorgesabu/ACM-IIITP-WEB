@@ -105,4 +105,8 @@ npm install
 
 If you'd like, I can also add a short troubleshooting section (build errors, Node version suggestions), or commit this change for you.
 
+## Dynamic Updates to Events and Team member information Plan
+
+with the static build we can use supabase to work as the database for both our file system and other data so we wont have to again and again make changes to the code directly acces the admin section of the site which also needs to be made we can dynamically upadate these sections and any other section we need according, we just need to implement this and check whether it will perform properly with the provided hosting.
+
 
