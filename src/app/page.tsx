@@ -11,49 +11,14 @@ import { ContactForm } from '@/components/contact-form';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ArrowRight, Calendar, Users, Award, Briefcase, Lightbulb, Bot, User } from 'lucide-react';
+import { ArrowRight, Calendar, Users, Award, Briefcase, Lightbulb, Bot, User, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { eventsData } from '@/data/events';
+import { useEvents } from '@/hooks/useEvents'; // ADDED HOOK
+import { useAbout } from '@/hooks/useAbout';
+import { useTeam } from '@/hooks/useTeam';
+import { useFAQs } from '@/hooks/useFAQs';
 import { EventCard } from '@/components/event-card';
 
-type TeamMember = {
-  id: string;
-  name: string;
-  role: string;
-  category: 'Faculty Advisor' | 'Office Bearer' | 'Vertical Head' | 'Member';
-  bio: string;
-  imageId: string;
-};
-
-const team: TeamMember[] = [
-  { id: '1', name: 'Dr. Shrikant Salve', role: 'Faculty Advisor', category: 'Faculty Advisor', bio: 'Guiding the chapter with years of experience in academia and research.', imageId: '1' },
-  { id: '2', name: 'Saurav Dhabade', role: 'Chair', category: 'Office Bearer', bio: 'Leading the team towards new heights and fostering a culture of innovation.', imageId: '2' },
-  { id: '3', name: 'Roshni Sahoo', role: 'Vice Chair', category: 'Office Bearer', bio: 'Supporting the chapter\'s vision and managing internal affairs.', imageId: '3' },
-  { id: '4', name: 'Gargi Avadhani', role: 'Treasurer', category: 'Office Bearer', bio: 'Organizing, documenting, and ensuring smooth communication.', imageId: '4' },
-  { id: '5', name: 'Piyush Kulkarni', role: 'Membership Chair', category: 'Office Bearer', bio: 'Fostering community growth and ensuring a welcoming environment for all members.', imageId: '5' },
-  { id: '6', name: 'Ayushman Ghosh', role: 'Management Head', category: 'Vertical Head', bio: 'Ensuring smooth operations and effective management of chapter activities.', imageId: '6' },
-  { id: '7', name: 'Sarthak Gaikwad', role: 'AI/ML Head', category: 'Vertical Head', bio: 'Diving deep into data, models, and artificial intelligence.', imageId: '7' },
-  { id: '8', name: 'Harshit Nashine', role: 'AR/VR Head', category: 'Vertical Head', bio: 'Exploring immersive technologies and building virtual experiences.', imageId: '8' },
-  { id: '9', name: 'YUVRAJ JARWAL', role: 'Social Media Head', category: 'Vertical Head', bio: 'Managing the chapter\'s digital presence and engaging with the community.', imageId: '9' },
-  { id: '10', name: 'ABC', role: 'Competitive Programming Head', category: 'Vertical Head', bio: 'Leading the charge in algorithmic challenges and contests.', imageId: 'team-head-cp' },
-  { id: '11', name: 'ABC ', role: 'Development Head', category: 'Vertical Head', bio: 'Building cool projects and exploring new technologies.', imageId: 'team-head-dev' },
-  { id: '12', name: 'Dr. Shrikant Salve', role: 'Member', category: 'Member', bio: 'Guiding the chapter with years of experience in academia and research.', imageId: '12' },
-  { id: '13', name: 'Saurav Dhabade', role: 'Member', category: 'Member', bio: 'Leading the team towards new heights and fostering a culture of innovation.', imageId: '13' },
-  { id: '14', name: 'Roshni Sahoo', role: 'Member', category: 'Member', bio: 'Supporting the chapter\'s vision and managing internal affairs.', imageId: '14' },
-  { id: '15', name: 'Gargi Avadhani', role: 'Member', category: 'Member', bio: 'Organizing, documenting, and ensuring smooth communication.', imageId: '15' },
-  { id: '16', name: 'Piyush Kulkarni', role: 'Member', category: 'Member', bio: 'Fostering community growth and ensuring a welcoming environment for all members.', imageId: '16' },
-  { id: '17', name: 'Pravin Dhanrao', role: 'Member', category: 'Member', bio: 'Building cool projects and exploring new technologies.', imageId: '17' },
-  { id: '18', name: 'Akshita Gupta', role: 'Member', category: 'Member', bio: 'Diving deep into data, models, and artificial intelligence.', imageId: '18' },
-  { id: '19', name: 'Rajeshwari Harsh', role: 'Member', category: 'Member', bio: 'Crafting beautiful and intuitive user experiences.', imageId: '19' },
-  { id: '20', name: 'Kirtiraj Jadeja', role: 'Member', category: 'Member', bio: 'Bridging the gap between students and the tech industry.', imageId: '20' },
-  { id: '21', name: 'Priya Jadhav', role: 'Member', category: 'Member', bio: 'Managing the chapter\'s public image and outreach.', imageId: '21' },
-  { id: '22', name: 'Mahesh Lonare', role: 'Member', category: 'Member', bio: 'Passionate about learning and contributing to the tech community.', imageId: '22' },
-  { id: '23', name: 'Jyoti Manoorkar', role: 'Member', category: 'Member', bio: 'A budding developer with a keen interest in open source.', imageId: '23' },
-  { id: '24', name: 'Jayata Roy', role: 'Member', category: 'Member', bio: 'Exploring the fascinating world of cybersecurity.', imageId: '24' },
-  { id: '25', name: 'Santosh Shelke', role: 'Member', category: 'Member', bio: 'A competitive programmer honing his problem-solving skills.', imageId: '25' },
-  { id: '26', name: 'Swapnil Shinde', role: 'Member', category: 'Member', bio: 'Passionate about UI/UX and creating delightful interfaces.', imageId: '26' },
-  { id: '27', name: 'Faraj Tamboli', role: 'Member', category: 'Member', bio: 'Venturing into machine learning and its applications.', imageId: '27' },
-];
 
 
 
@@ -65,8 +30,8 @@ const Section = ({ id, className, children }: { id?: string, className?: string,
   </section>
 );
 
-const TeamMemberImage = ({ id, name }: { id: string, name: string }) => {
-  const [src, setSrc] = useState(`/team/${id}.png`);
+const TeamMemberImage = ({ imageUrl, name }: { imageUrl: string, name: string }) => {
+  const [src, setSrc] = useState(imageUrl);
 
   return (
     <div className="w-full h-full aspect-square bg-white relative">
@@ -76,8 +41,11 @@ const TeamMemberImage = ({ id, name }: { id: string, name: string }) => {
         fill
         className="object-cover transition-transform duration-300 group-hover:scale-105"
         onError={() => {
-          if (src.endsWith('.png')) setSrc(`/team/${id}.jpg`);
-          else if (src.endsWith('.jpg')) setSrc(`/team/${id}.JPG`);
+          // Fallback strategy if needed, but for now just let it fail gracefully or show placeholder
+          // If it's a local path like /team/1.png, we might want to try other extensions?
+          // But the database has the full path.
+          // Let's just keep simple for now or use a placeholder.
+          setSrc('/placeholder-user.jpg'); // Pending: Make sure this exists or use a generic one
         }}
       />
     </div>
@@ -90,13 +58,15 @@ const SectionTitle = ({ children, className }: { children: React.ReactNode, clas
   </h2>
 );
 
+import { TeamMember } from '@/hooks/useTeam';
+
 const TeamCategory = ({ title, members }: { title: string, members: TeamMember[] }) => (
   <div className="mb-12">
     <h3 className="text-2xl font-headline font-bold tracking-tighter sm:text-3xl text-center mb-8">{title}</h3>
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 justify-center">
       {members.map((member) => (
         <div key={member.id} className="group relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-2 flex flex-col items-center justify-center">
-          <TeamMemberImage id={member.imageId} name={member.name} />
+          <TeamMemberImage imageUrl={member.image_url} name={member.name} />
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 p-4 text-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             <div className="translate-y-4 transition-transform duration-300 group-hover:translate-y-0">
               <h3 className="font-headline text-xl font-bold text-white">{member.name}</h3>
@@ -114,6 +84,9 @@ const TeamCategory = ({ title, members }: { title: string, members: TeamMember[]
   </div>
 );
 
+
+import { LoadingScreen } from '@/components/loading-screen';
+
 export default function Home() {
   const teamCategories = ['Faculty Advisor', 'Office Bearer', 'Vertical Head', 'Member'];
 
@@ -123,11 +96,31 @@ export default function Home() {
     autoplay: true,
   });
 
-  // Sort events by date descending and take top 3
-  const recentEvents = [...eventsData].sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  }).slice(0, 3);
+  // Fetch events using hook
+  const { events, loading: eventsLoading, error } = useEvents();
+  const { aboutData, loading: aboutLoading } = useAbout();
+  const { team, loading: teamLoading } = useTeam();
+  const { faqs, loading: faqsLoading } = useFAQs();
 
+  // Aggregate loading state
+  const isLoading = eventsLoading || aboutLoading || teamLoading || faqsLoading;
+
+  // If loading and no data cached (handled by hooks), show loader
+  // Hook logic: if cache exists, loading is false. So isLoading is true ONLY if fresh fetch is needed.
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
+  // Filter for upcoming/ongoing and take top 4
+  const upcomingEvents = events
+    .filter(e => e.status === 'upcoming' || e.status === 'ongoing')
+    .slice(0, 4);
+
+  // If no upcoming, show recent past
+  const eventsToShow = upcomingEvents.length > 0
+    ? upcomingEvents
+    : events.slice(0, 4);
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -161,10 +154,10 @@ export default function Home() {
 
         {/* About Section */}
         <Section id="about" className="bg-card">
-          <SectionTitle className="mb-12">About Us</SectionTitle>
-          <p className="max-w-3xl mx-auto text-center text-muted-foreground md:text-lg">
-            ACM, the world's largest educational and scientific computing society, delivers resources that advance computing as a science and a profession. The IIIT Pune ACM Student Chapter is a hub for students passionate about computer science. We organize a variety of events, including coding competitions, workshops, and tech talks, to foster a vibrant tech culture on campus and provide a platform for students to learn, innovate, and network.
-          </p>
+          <SectionTitle className="mb-12">{aboutData ? aboutData.title : 'About Us'}</SectionTitle>
+          <div className="max-w-3xl mx-auto text-center text-muted-foreground md:text-lg whitespace-pre-wrap">
+            {aboutData ? aboutData.content : `ACM, the world's largest educational and scientific computing society, delivers resources that advance computing as a science and a profession. The IIIT Pune ACM Student Chapter is a hub for students passionate about computer science. We organize a variety of events, including coding competitions, workshops, and tech talks, to foster a vibrant tech culture on campus and provide a platform for students to learn, innovate, and network.`}
+          </div>
         </Section>
 
 
@@ -173,46 +166,55 @@ export default function Home() {
         {/* Events Section */}
         <Section id="events">
           <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
-            <SectionTitle className="mb-0 text-center md:text-left">Upcoming Events</SectionTitle>
+            <SectionTitle className="mb-0 text-center md:text-left">
+              {upcomingEvents.length > 0 ? 'Upcoming & Ongoing Events' : 'Recent Events'}
+            </SectionTitle>
             <Button asChild variant="outline" className="w-full md:w-auto">
               <Link href="/events">Show All <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
           </div>
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {recentEvents.map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          </div>
+
+          {eventsLoading ? (
+            <div className="flex justify-center p-12">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          ) : (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+              {eventsToShow.map((event) => (
+                <EventCard key={event.id} event={event} />
+              ))}
+              {eventsToShow.length === 0 && (
+                <div className="col-span-full text-center text-muted-foreground p-8">
+                  No events found.
+                </div>
+              )}
+            </div>
+          )}
         </Section>
 
         {/* Membership Section */}
         <Section id="membership" className="bg-card">
-          <SectionTitle className="mb-12">Become a Member</SectionTitle>
+          <SectionTitle className="mb-12">{aboutData?.membership_title || 'Become a Member'}</SectionTitle>
           <div className="max-w-4xl mx-auto">
             <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="item-1">
-                <AccordionTrigger className="font-headline text-lg">Why Join ACM?</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  Being a member of ACM IIIT Pune connects you to a large community of tech enthusiasts. You get access to exclusive workshops, mentorship from seniors, and a chance to represent the college in prestigious competitions. It's a great opportunity to improve your skills, build your network, and collaborate on exciting projects.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-2">
-                <AccordionTrigger className="font-headline text-lg">Membership Benefits</AccordionTrigger>
-                <AccordionContent>
-                  <ul className="space-y-2 text-muted-foreground list-disc pl-5">
-                    <li><Award className="inline-block h-4 w-4 mr-2 text-primary" />Priority access to all our events and workshops.</li>
-                    <li><Users className="inline-block h-4 w-4 mr-2 text-primary" />Opportunities to network with industry professionals and alumni.</li>
-                    <li><Briefcase className="inline-block h-4 w-4 mr-2 text-primary" />Chance to be part of the organizing team for chapter events.</li>
-                    <li><Lightbulb className="inline-block h-4 w-4 mr-2 text-primary" />Access to exclusive resources and learning materials.</li>
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-3">
-                <AccordionTrigger className="font-headline text-lg">How to Join?</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  Membership drives are held at the beginning of each academic year. Keep an eye on our social media channels and campus notice boards for announcements. You can also reach out to any of our team members for more information.
-                </AccordionContent>
-              </AccordionItem>
+              {faqs.map((faq) => (
+                <AccordionItem key={faq.id} value={faq.id}>
+                  <AccordionTrigger className="font-headline text-lg text-left">{faq.question}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground whitespace-pre-wrap">
+                    {faq.answer}
+                    {faq.link_url && (
+                      <div className="mt-2">
+                        <Link href={faq.link_url} target="_blank" className="text-primary hover:underline font-medium inline-flex items-center">
+                          {faq.link_text || 'Learn More'} <ArrowRight className="ml-1 w-3 h-3" />
+                        </Link>
+                      </div>
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+              {faqs.length === 0 && !faqsLoading && (
+                <p className="text-center text-muted-foreground">Membership details coming soon.</p>
+              )}
             </Accordion>
           </div>
         </Section>
@@ -220,13 +222,34 @@ export default function Home() {
         {/* Team Section */}
         <Section id="team">
           <SectionTitle className="mb-12">Our Team</SectionTitle>
-          {teamCategories.map(category => (
-            <TeamCategory
-              key={category}
-              title={category}
-              members={team.filter(member => member.category === category)}
-            />
-          ))}
+          {teamLoading ? (
+            <div className="flex justify-center">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          ) : (
+            teamCategories.map(category => {
+              // Standard logic: Filter by exact category
+              let members = team.filter(member => member.category === category);
+
+              // Special logic: 'Member' category should include EVERYONE (duplicates visual, single source truth)
+              // But sorting 'Member' role to the end if desired, or just show all.
+              // As per request: "any faculy advisor office bearer or vertical heads are directly members no need to re enter them just display them again"
+              if (category === 'Member') {
+                members = team; // Show everyone in the 'Member' section
+                // Optional: You might want to sort them so "Members" come last or by name
+              }
+
+              if (members.length === 0) return null;
+
+              return (
+                <TeamCategory
+                  key={category}
+                  title={category}
+                  members={members}
+                />
+              );
+            })
+          )}
         </Section>
 
         {/* Contact Section */}

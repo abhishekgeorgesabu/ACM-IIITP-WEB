@@ -1,55 +1,42 @@
-import fs from 'fs';
-import path from 'path';
+
+'use client';
+
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
-import { EventCard, Event } from '@/components/event-card';
+import { EventCard } from '@/components/event-card';
 import { EventHero } from '@/components/event-hero';
-import { eventsData } from '@/data/events';
-
-
-// Helper to get gallery images
-function getEventGallery(eventId: string): string[] {
-  const galleryDir = path.join(process.cwd(), 'public', 'events', `event_${eventId}`);
-
-  if (!fs.existsSync(galleryDir)) {
-    return [];
-  }
-
-  const files = fs.readdirSync(galleryDir);
-
-  const images = files
-    .filter(file => /\.(jpg|jpeg|png|webp)$/i.test(file))
-    .sort((a, b) => {
-      const numA = parseInt(a.split('.')[0]);
-      const numB = parseInt(b.split('.')[0]);
-      return numA - numB;
-    })
-    .map(file => `/events/event_${eventId}/${file}`);
-
-  return images;
-}
+import { useEvents } from '@/hooks/useEvents';
+import { Loader2 } from 'lucide-react';
 
 export default function EventsPage() {
-  // Enrich events with gallery data
-  const enrichedEvents = eventsData.map(event => ({
-    ...event,
-    gallery: getEventGallery(event.id),
-    // Fallback if image path assumes old structure but folder exists
-    image: fs.existsSync(path.join(process.cwd(), 'public', `events/event_${event.id}/1.jpg`))
-      ? `/events/event_${event.id}/1.jpg`
-      : (fs.existsSync(path.join(process.cwd(), 'public', `events/event_${event.id}/1.png`))
-        ? `/events/event_${event.id}/1.png`
-        : event.image)
-  }));
+  const { events, loading, error } = useEvents();
 
-  // Sort events by date descending (latest first)
-  const sortedEvents = [...enrichedEvents].sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
+  if (loading) {
+    return (
+      <div className="flex flex-col min-h-screen bg-background">
+        <Header />
+        <main className="flex-1 flex items-center justify-center">
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
-  const featuredEvent = sortedEvents[0];
-  // User wants ALL events in the grid, including the hero event
-  const gridEvents = sortedEvents;
+  if (error) {
+    return (
+      <div className="flex flex-col min-h-screen bg-background">
+        <Header />
+        <main className="flex-1 flex items-center justify-center">
+          <p className="text-destructive">Failed to load events. Please try again later.</p>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  const featuredEvent = events.find(e => e.isFeatured) || events[0];
+  const gridEvents = events;
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -57,10 +44,11 @@ export default function EventsPage() {
       <main className="flex-1">
 
         {/* Featured Event Section */}
-        <section className="relative">
-          {/* You might want a background for the whole section or just let the hero handle it */}
-          <EventHero event={featuredEvent} />
-        </section>
+        {featuredEvent && (
+          <section className="relative">
+            <EventHero event={featuredEvent} />
+          </section>
+        )}
 
         {/* All Events Grid */}
         <section className="container mx-auto px-4 md:px-6 py-16">

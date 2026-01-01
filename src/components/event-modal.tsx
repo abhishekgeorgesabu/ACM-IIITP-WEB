@@ -104,30 +104,32 @@ export function EventModal({ event, isOpen, onClose }: EventModalProps) {
 
                         {/* Description Section */}
                         <div className="prose prose-sm dark:prose-invert max-w-none text-foreground">
-                            {event.description.split('\n').map((line, index) => {
-                                if (line.startsWith('### ')) {
-                                    return (
-                                        <h3 key={index} className="text-xl font-headline font-bold mt-6 mb-3 text-primary">
-                                            {line.replace('### ', '')}
-                                        </h3>
-                                    );
+                            {(() => {
+                                try {
+                                    const desc = event.description || '';
+                                    if (desc.startsWith('[')) {
+                                        const sections = JSON.parse(desc);
+                                        if (Array.isArray(sections)) {
+                                            return sections.map((section: any, idx: number) => (
+                                                <div key={idx} className="mb-4">
+                                                    <h3 className="text-xl font-headline font-bold mt-4 mb-2 text-primary">{section.heading}</h3>
+                                                    {section.content?.split('\n').map((line: string, i: number) => (
+                                                        <p key={i} className="mb-2 leading-relaxed text-base">{line}</p>
+                                                    ))}
+                                                </div>
+                                            ));
+                                        }
+                                    }
+                                    // Fallback text
+                                    return desc.split('\n').map((line, index) => (
+                                        <p key={index} className="mb-2 leading-relaxed text-base">{line}</p>
+                                    ));
+                                } catch (e) {
+                                    return event.description?.split('\n').map((line, index) => (
+                                        <p key={index} className="mb-2 leading-relaxed text-base">{line}</p>
+                                    ));
                                 }
-                                if (line.startsWith('#### ')) {
-                                    return (
-                                        <h4 key={index} className="text-lg font-headline font-semibold mt-4 mb-2">
-                                            {line.replace('#### ', '')}
-                                        </h4>
-                                    );
-                                }
-                                if (line.trim() === '') {
-                                    return <br key={index} />;
-                                }
-                                return (
-                                    <p key={index} className="mb-2 leading-relaxed text-base">
-                                        {line}
-                                    </p>
-                                );
-                            })}
+                            })()}
                         </div>
 
                     </div>

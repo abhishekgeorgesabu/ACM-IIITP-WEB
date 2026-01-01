@@ -94,4 +94,8 @@ html {
   .animate-glow-blue {
     animation: glow-blue 2s ease-in-out infinite;
   }
+  
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
+  }
 }

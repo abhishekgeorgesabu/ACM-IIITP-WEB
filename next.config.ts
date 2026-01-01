@@ -2,6 +2,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   output: 'export', // REQUIRED for cPanel static hosting
+  trailingSlash: true, // Creates folders (admin/index.html) instead of files (admin.html)
 
   typescript: {
     ignoreBuildErrors: true,
@@ -27,6 +28,11 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'picsum.photos',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'xojgazsikkvzickbiltf.supabase.co',
         pathname: '/**',
       },
     ],

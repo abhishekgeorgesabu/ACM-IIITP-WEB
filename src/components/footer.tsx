@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Code, Github, Linkedin, Twitter } from 'lucide-react';
+import { Code, Github, Linkedin, Mail, Instagram } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -14,13 +14,13 @@ export function Footer() {
             &copy; {new Date().getFullYear()} ACM IIIT Pune. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
-            <Link href="#" aria-label="Twitter">
-              <Twitter className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
+            <Link href="mailto:acm.chapter@iiitp.ac.in" aria-label="Email">
+              <Mail className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
             </Link>
-            <Link href="#" aria-label="GitHub">
-              <Github className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
+            <Link href="https://www.instagram.com/iiitp.sigchi/" target="_blank" aria-label="Instagram">
+              <Instagram className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
             </Link>
-            <Link href="#" aria-label="LinkedIn">
+            <Link href="https://www.linkedin.com/company/iiitpsigchi" target="_blank" aria-label="LinkedIn">
               <Linkedin className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
             </Link>
           </div>

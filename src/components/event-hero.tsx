@@ -65,25 +65,25 @@ export function EventHero({ event }: { event: Event }) {
                             </div>
 
                             {/* CTA */}
-                            <div className="pt-4">
-                                {isFuture ? (
+                            {/* CTA */}
+                            <div className="pt-4 flex gap-4">
+                                {(event.status === 'upcoming' || event.status === 'ongoing') && event.registerLink && (
                                     <Button
                                         size="lg"
                                         className="rounded-full px-8 text-lg gap-2"
-                                        onClick={() => window.open(event.registerLink || '#', '_blank')}
+                                        onClick={() => window.open(event.registerLink, '_blank')}
                                     >
                                         Register Now <ArrowRight className="w-5 h-5" />
                                     </Button>
-                                ) : (
-                                    <Button
-                                        size="lg"
-                                        variant="outline"
-                                        className="rounded-full px-8 text-lg gap-2 bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white hover:text-black transition-colors"
-                                        onClick={() => setIsModalOpen(true)}
-                                    >
-                                        Know More <ArrowRight className="w-5 h-5" />
-                                    </Button>
                                 )}
+
+                                <Button
+                                    size="lg"
+                                    className="rounded-full px-8 text-lg gap-2 bg-white text-black hover:bg-white/90 transition-colors border-none"
+                                    onClick={() => window.location.href = `/events/view/?id=${event.id}`}
+                                >
+                                    Know More <ArrowRight className="w-5 h-5" />
+                                </Button>
                             </div>
 
                         </div>

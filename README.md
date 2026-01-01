@@ -1,112 +1,101 @@
-# IIITP ACM SIGCHI Student Chapter Website
+# IIITP ACM SIGCHI Student Chapter Website 🚀
 
-This repository contains the Next.js website for the IIITP ACM SIGCHI Student Chapter.
+This is the official dynamic website for the IIITP ACM SIGCHI Student Chapter, built with Next.js and powered by Supabase.
 
-## Prerequisites
+---
 
-- Node.js (recommend v18 or newer)
-- npm (or yarn / pnpm)
+## ✨ Features
 
-## Install
+*   **Dynamic Events**: Add, edit, and remove events instantly via the Admin Panel.
+*   **Team Management**: Update team members, roles, and profile pictures dynamically.
+*   **Managed Content**: Change "About Us" text and "Membership" headings without code.
+*   **Static & Fast**: Designed for static hosting (cPanel/Apache) with `output: 'export'`.
+*   **Smart Caching**: In-memory caching ensures instant navigation while minimizing database API calls.
+*   **Secure**: Protected by Supabase Row Level Security (RLS) policies.
 
-Install dependencies and start the development server:
+---
+
+## 🛠️ Tech Stack
+
+*   **Frontend**: Next.js 15 (React 19), TailwindCSS, Lucide Icons.
+*   **Database**: Supabase (PostgreSQL) for Events, Team, FAQs, and Site Config.
+*   **Storage**: Supabase Storage for managing images.
+*   **Hosting**: Any Static Host (e.g., A2 Hosting, Hostinger, GitHub Pages) via Apache/LiteSpeed.
+
+---
+
+## 🚀 Getting Started
+
+### 1. Installation
 
 ```bash
+# Install dependencies
 npm install
+
+# Start development server
 npm run dev
 ```
-# Hosting
 
+### 2. Configuration (`src/lib/supabaseConfig.ts`)
+
+Ensure your Supabase keys are correctly set in `src/lib/supabaseConfig.ts`.
+*   `SUPABASE_URL`: Your project URL.
+*   `SUPABASE_ANON_KEY`: Your public API key (safe for client-side use).
+
+### 3. Database Schema
+
+The site relies on 4 main tables in Supabase:
+1.  **`events`**: Stores event details, dates, and gallery links.
+2.  **`team_members`**: Stores team profiles, roles, and ordering (`order_index`).
+3.  **`membership_faqs`**: Stores FAQ questions, answers, and links.
+4.  **`about_info`**: Stores the "About Description" and "Membership Heading".
+
+> **Note**: Row Level Security (RLS) is enabled to allow *Public Read* access but *Authenticated Write* access only.
+
+---
+
+## 🛡️ Admin Panel
+
+Access the dashboard at: http://localhost:3000/admin
+
+*   **Login**: Uses Supabase Auth (Email/Password).
+*   **Capabilities**:
+    *   **Events Tab**: Create upcoming events, mark past events, upload covers.
+    *   **Team Tab**: Add members, upload photos, reorder them manually.
+    *   **About Tab**: Edit section titles and descriptions.
+    *   **FAQs Tab**: Manage common questions and add external links.
+
+---
+
+## 📦 Deployment (Static Export)
+
+This project is configured for **Static Export** (`output: 'export'` in `next.config.ts`).
+
+### Step 1: Build
 ```bash
-npm build
+sudo npm run build
 ```
-Build will located in ACM-IIITP-WEB/out 
+This generates an `out` folder containing all HTML/CSS/JS files.
 
-Cpanel > File manager > public_html
+### Step 2: Deploy to cPanel/Hosting
+1.  **Clean Upload**: Delete old defaults (`public_html` contents).
+2.  **Upload**: Upload the **contents** of the `out` folder to `public_html`.
+3.  **Important**: Ensure the `.htaccess` file (located in `public/`) is included. It handles:
+    *   Clean URLs (e.g., `/admin` instead of `/admin.html`).
+    *   404 Redirections.
 
-## Common scripts
+> **Why Trailing Slash?**
+> We use `trailingSlash: true` so Next.js creates folders (`events/view/index.html`) instead of files. This is most compatible with standard web servers.
 
-- `npm run dev` — start development server
-- `npm run build` — build for production
-- `npm run start` — start the production server
-- `npm run lint` — run linter
-- `npm run typecheck` — run TypeScript type check
+---
 
-## Dependencies
+## 🤝 Contributing
 
-The project uses the following runtime dependencies (from `package.json`):
+1.  Fork the repo.
+2.  Create a feature branch (`git checkout -b feature/AmazingFeature`).
+3.  Commit changes (`git commit -m 'Add AmazingFeature'`).
+4.  Push to branch (`git push origin feature/AmazingFeature`).
+5.  Open a Pull Request.
 
-- @genkit-ai/google-genai: ^1.20.0
-- @genkit-ai/next: ^1.20.0
-- @hookform/resolvers: ^4.1.3
-- @radix-ui/react-accordion: ^1.2.3
-- @radix-ui/react-alert-dialog: ^1.1.6
-- @radix-ui/react-avatar: ^1.1.3
-- @radix-ui/react-checkbox: ^1.1.4
-- @radix-ui/react-collapsible: ^1.1.11
-- @radix-ui/react-dialog: ^1.1.6
-- @radix-ui/react-dropdown-menu: ^2.1.6
-- @radix-ui/react-label: ^2.1.2
-- @radix-ui/react-menubar: ^1.1.6
-- @radix-ui/react-popover: ^1.1.6
-- @radix-ui/react-progress: ^1.1.2
-- @radix-ui/react-radio-group: ^1.2.3
-- @radix-ui/react-scroll-area: ^1.2.3
-- @radix-ui/react-select: ^2.1.6
-- @radix-ui/react-separator: ^1.1.2
-- @radix-ui/react-slider: ^1.2.3
-- @radix-ui/react-slot: ^1.2.3
-- @radix-ui/react-switch: ^1.1.3
-- @radix-ui/react-tabs: ^1.1.3
-- @radix-ui/react-toast: ^1.2.6
-- @radix-ui/react-tooltip: ^1.1.8
-- @rive-app/react-canvas: ^4.23.4
-- @rive-app/react-webgl2: ^4.23.4
-- @rive-app/webgl: ^2.31.6
-- class-variance-authority: ^0.7.1
-- clsx: ^2.1.1
-- date-fns: ^3.6.0
-- dotenv: ^16.5.0
-- embla-carousel-react: ^8.6.0
-- firebase: ^11.9.1
-- genkit: ^1.20.0
-- lucide-react: ^0.475.0
-- next: 15.3.3
-- patch-package: ^8.0.0
-- react: ^18.3.1
-- react-day-picker: ^8.10.1
-- react-dom: ^18.3.1
-- react-hook-form: ^7.54.2
-- recharts: ^2.15.1
-- rive-react: ^4.10.3
-- tailwind-merge: ^3.0.1
-- tailwindcss-animate: ^1.0.7
-- zod: ^3.24.2
-
-## Dev dependencies
-
-- @types/node: ^20
-- @types/react: ^18
-- @types/react-dom: ^18
-- cross-env: ^10.1.0
-- genkit-cli: ^1.20.0
-- postcss: ^8
-- tailwindcss: ^3.4.1
-- typescript: ^5
-
-## Notes
-
-- See `package.json` for the authoritative, up-to-date dependency versions and available scripts.
-- To install or update dependencies use:
-
-```bash
-npm install
-```
-
-If you'd like, I can also add a short troubleshooting section (build errors, Node version suggestions), or commit this change for you.
-
-## Dynamic Updates to Events and Team member information Plan
-
-with the static build we can use supabase to work as the database for both our file system and other data so we wont have to again and again make changes to the code directly acces the admin section of the site which also needs to be made we can dynamically upadate these sections and any other section we need according, we just need to implement this and check whether it will perform properly with the provided hosting.
-
-
+---
+&copy; 2026 ACM IIIT Pune. All rights reserved.

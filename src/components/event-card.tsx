@@ -19,7 +19,8 @@ export interface Event {
     isFeatured?: boolean;
     gallery?: string[];
     registerLink?: string; // Optional link for future events
-    status: 'upcoming' | 'past';
+    galleryLink?: string; // Optional link to external gallery
+    status: 'upcoming' | 'past' | 'ongoing';
 }
 
 export function EventCard({ event }: { event: Event }) {
@@ -66,25 +67,41 @@ export function EventCard({ event }: { event: Event }) {
                     </div>
 
                     <p className="text-sm text-muted-foreground line-clamp-2 mb-4 flex-1">
-                        {event.description}
+                        {(() => {
+                            try {
+                                const desc = event.description || '';
+                                if (desc.startsWith('[')) {
+                                    const sections = JSON.parse(desc);
+                                    if (Array.isArray(sections) && sections.length > 0) {
+                                        const firstSection = sections[0];
+                                        return firstSection.content || firstSection.heading || '';
+                                    }
+                                }
+                                return desc;
+                            } catch (e) {
+                                return event.description;
+                            }
+                        })()}
                     </p>
 
-                    {isFuture ? (
+                    <div className="flex flex-col gap-2 mt-auto">
                         <Button
-                            className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
-                            onClick={() => window.open(event.registerLink || '#', '_blank')}
-                        >
-                            Register Now
-                        </Button>
-                    ) : (
-                        <Button
-                            variant="outline"
-                            className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
-                            onClick={() => setIsModalOpen(true)}
+                            variant="secondary"
+                            className="w-full"
+                            onClick={() => window.location.href = `/events/view/?id=${event.id}`}
                         >
                             Know More
                         </Button>
-                    )}
+
+                        {(event.status === 'upcoming' || event.status === 'ongoing') && event.registerLink && (
+                            <Button
+                                className="w-full"
+                                onClick={() => window.open(event.registerLink, '_blank')}
+                            >
+                                Register Now
+                            </Button>
+                        )}
+                    </div>
                 </div>
             </div>
 

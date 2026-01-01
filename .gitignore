@@ -43,3 +43,8 @@ next-env.d.ts
 # firebase
 firebase-debug.log
 firestore-debug.log
+
+#utils
+seed-events.Js
+seed-team.js
+
